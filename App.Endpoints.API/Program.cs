@@ -11,7 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AuthenticationApplicationService();
-builder.Services.AddAuthenticationInfrastructure();
+builder.Services.AddAuthenticationInfrastructure(builder.Configuration);
+//builder.Services.Configure
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

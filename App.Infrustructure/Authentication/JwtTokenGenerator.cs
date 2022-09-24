@@ -1,4 +1,5 @@
 ﻿using App.Services.Common.Interfaces.Authentication;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,18 @@ namespace App.Infrustructure.Authentication
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
+        private readonly JwtSettings _jwtToken;
+
+        public JwtTokenGenerator(IOptions<JwtSettings> options)
+        {
+            _jwtToken = options.Value;
+        }
+
         public string GenerateToken(Guid userId, string firstName, string lastName)
         {
             var siginingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes("secret-info-key-for-learning-project")),
+                    Encoding.UTF8.GetBytes(_jwtToken.Secret)),
                 SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
@@ -26,8 +34,9 @@ namespace App.Infrustructure.Authentication
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
             };
             var securityToken = new JwtSecurityToken(
-                issuer: "Yousef",
-                expires: DateTime.Now.AddHours(1),
+                issuer:_jwtToken.Issuer,
+                audience:_jwtToken.Audience,
+                expires: DateTime.Now.AddHours(_jwtToken.ExpiryMinutes),
                 claims: claims,
                 signingCredentials: siginingCredentials);
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
