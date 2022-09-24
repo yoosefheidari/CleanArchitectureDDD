@@ -1,5 +1,5 @@
 ﻿using App.Contracts.Authentication;
-using App.Services.Authentication;
+using App.Services.Services.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +27,7 @@ namespace App.Endpoints.API.Controllers
                 authResult.Token
                 );
             
-            return Ok();
+            return Ok(response);
         }
 
         [HttpPost("Register")]

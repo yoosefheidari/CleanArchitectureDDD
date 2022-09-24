@@ -1,3 +1,4 @@
+using App.Infrustructure.DependencyInjection;
 using App.Services.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AuthenticationApplicationService();
+builder.Services.AddAuthenticationInfrastructure();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
